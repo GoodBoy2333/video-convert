@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频转码服务</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<style>
+    .el-header {
+        background-color: #B3C0D1;
+        color: #333;
+        line-height: 60px;
+    }
+</style>
+<body>
+<el-container style=" border: 1px solid #eee;" id="app">
+    <el-main>
+        <el-header>
+            <i class="el-icon-video-camera-solid"></i>
+            <span class="icon-name">视频转码服务</span>
+        </el-header>
+
+        <el-tabs v-model="activeName">
+            <el-tab-pane label="待转码队列" name="queueTask">
+                <iframe style="border: none;width: 100%;height: 700px" src="/converttask/queuetask"></iframe>
+            </el-tab-pane>
+            <el-tab-pane label="转码任务" name="conventTask">
+                <iframe style="border: none;width: 100%;height: 700px" src="/converttask/conventtask"></iframe>
+            </el-tab-pane>
+            <el-tab-pane label="线程池状态" name="threadPool">
+                <iframe style="border: none;width: 100%;height: 700px" src="/converttask/threadpool"></iframe>
+            </el-tab-pane>
+        </el-tabs>
+    </el-main>
+</el-container>
+</body>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            activeName: 'queueTask'
+        },
+        created() {
+        },
+        methods: {}
+    })
+</script>
+</html>

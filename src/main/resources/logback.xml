@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property  name="path" value="D:/log/"/>
+	<property name="fileName" value="video-convert"/>
+	
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="debugFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  	<file>${path}debug/${fileName}-debug.log</file>
+  	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<level>DEBUG</level>
+		<onMatch>ACCEPT</onMatch>
+		<onMismatch>DENY</onMismatch>
+	</filter>
+	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  <!-- 按时间和文件大小进行滚动压缩日志 --> 
+		   <maxHistory>30</maxHistory> <!--表示存放最长为30天的日志压缩包 ,过期的将会被删除-->  
+	       <fileNamePattern>${path}debug/${fileName}-debug-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>    
+	       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	       		<maxFileSize>100MB</maxFileSize> <!-- 表示日志文件达到100M后触发滚动压缩 -->
+      	   </timeBasedFileNamingAndTriggeringPolicy>   
+	</rollingPolicy>
+  	<encoder>
+  		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} [%file:%line] - %msg%n</pattern>
+  	</encoder>
+  </appender>
+  
+  <appender name="infoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  	<file>${path}info/${fileName}-info.log</file>
+  	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<level>INFO</level>
+		<onMatch>ACCEPT</onMatch>
+		<onMismatch>DENY</onMismatch>
+	</filter>
+	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  <!-- 按时间和文件大小进行滚动压缩日志 --> 
+		   <maxHistory>30</maxHistory> <!--表示存放最长为30天的日志压缩包 ,过期的将会被删除-->   
+	       <fileNamePattern>${path}info/${fileName}-info-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>    
+	       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	       		<maxFileSize>100MB</maxFileSize> <!-- 表示日志文件达到100M后触发滚动压缩 -->
+      	   </timeBasedFileNamingAndTriggeringPolicy>   
+	</rollingPolicy>
+  	<encoder>
+  		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} [%file:%line] - %msg%n</pattern>
+  	</encoder>
+  </appender>
+  
+  <appender name="warnFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  	<file>${path}warn/${fileName}-warn.log</file>
+  	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<level>WARN</level>
+		<onMatch>ACCEPT</onMatch>
+		<onMismatch>DENY</onMismatch>
+	</filter>
+	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  <!-- 按时间和文件大小进行滚动压缩日志 --> 
+		   <maxHistory>30</maxHistory> <!--表示存放最长为30天的日志压缩包 ,过期的将会被删除-->  
+	       <fileNamePattern>${path}warn/${fileName}-warn-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>    
+	       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	       		<maxFileSize>100MB</maxFileSize> <!-- 表示日志文件达到100M后触发滚动压缩 -->
+      	   </timeBasedFileNamingAndTriggeringPolicy>  
+	</rollingPolicy>
+  	<encoder>
+  		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} [%file:%line] - %msg%n</pattern>
+  	</encoder>
+  </appender>
+  
+  <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  	<file>${path}error/${fileName}-error.log</file>
+  	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<level>ERROR</level>
+		<onMatch>ACCEPT</onMatch>
+		<onMismatch>DENY</onMismatch>
+	</filter>
+	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">  <!-- 按时间和文件大小进行滚动压缩日志 --> 
+		   <maxHistory>30</maxHistory> <!--表示存放最长为30天的日志压缩包 ,过期的将会被删除-->  
+	       <fileNamePattern>${path}error/${fileName}-error-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>    
+	       <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	       		<maxFileSize>100MB</maxFileSize> <!-- 表示日志文件达到100M后触发滚动压缩 -->
+      	   </timeBasedFileNamingAndTriggeringPolicy>   
+	</rollingPolicy>
+  	<encoder>
+  		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} [%file:%line] - %msg%n</pattern>
+  	</encoder>
+  </appender>
+  <logger name="com.hystar.core" level="debug" ><!-- additivity="false" -->
+		<appender-ref ref="debugFile" />
+		<appender-ref ref="infoFile" />
+		<appender-ref ref="warnFile" />
+		<appender-ref ref="errorFile" />
+  </logger>
+	<logger name="druid" level="debug" additivity="false" ><!-- additivity="false" ,该属性用于控制是否在控制台输出消息，如果不设置，默认输出，设为false后不输出-->
+		<appender-ref ref="debugFile" />
+		<appender-ref ref="infoFile" />
+		<appender-ref ref="warnFile" />
+		<appender-ref ref="errorFile" />
+	</logger>
+  <root lever="info" >
+  	<appender-ref ref="STDOUT"  /> 
+  </root>
+</configuration>

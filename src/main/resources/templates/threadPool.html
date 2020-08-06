@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>队列信息</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            margin-bottom: 18px;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            display: table;
+            content: "";
+        }
+        .clearfix:after {
+            clear: both
+        }
+
+        .box-card {
+            width: 480px;
+        }
+    </style>
+</head>
+<body>
+<el-container style=" border: 1px solid #eee;" id="app">
+    <el-main>
+        <div slot="header" class="clearfix">
+            <span>线程池信息</span>
+        </div>
+        <div class="text item">
+            当前排队任务（线程）数：{{conventTaskInfo.QueueSize}}
+        </div>
+        <div class="text item">
+            当前活动任务（线程）数：{{conventTaskInfo.ActiveCount}}
+        </div>
+        <div class="text item">
+            当前执行完成任务（线程）数：{{conventTaskInfo.CompletedTaskCount}}
+        </div>
+        <div class="text item">
+            当前线程（排队线程数 + 活动线程数 +  执行完成线程数）数：{{conventTaskInfo.TaskCount}}
+        </div>
+        <div class="text item">
+            曾经创建过的最大任务（线程）数：{{conventTaskInfo.LargestPoolSize}}
+        </div>
+        <div class="text item">
+            线程池是否关闭：{{conventTaskInfo.isShutdown?'是':'否'}}
+        </div>
+        <div class="text item">
+            线程池是否终止：{{conventTaskInfo.isTerminated?'是':'否'}}
+        </div>
+    </el-main>
+</el-container>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            threadPoolTimert: '',
+            conventTaskInfo: {
+                ActiveCount: 0,
+                CompletedTaskCount: 0,
+                LargestPoolSize: 0,
+                QueueSize: 0,
+                TaskCount: 0,
+                isShutdown: false,
+                isTerminated: false
+            }
+        },
+        beforeDestroy() {
+            clearInterval(this.threadPoolTimert);
+        },
+        beforeMount() {
+            this.getThreadPoolInfo();
+            this.threadPoolTimert = setInterval(this.getThreadPoolInfo, 3000);
+        },
+        methods: {
+            async getThreadPoolInfo() {
+                let res = await axios.post('/converttask/threadpoolinfo');
+                !!res.data.data?this.conventTaskInfo=res.data.data:'';
+            }
+        }
+    })
+</script>
+</html>

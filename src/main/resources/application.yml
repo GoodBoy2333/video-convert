@@ -1,0 +1,62 @@
+server:
+  port: 8021
+mybatis:
+  mapper-locations:
+    - "classpath*:mapper/**/*.xml"                     # mapper映射文件
+
+spring:
+  #配置模板引擎，视图层页面返回以html结尾
+  thymeleaf:
+    suffix: .html
+    mode: HTML5
+  #数据源配置开始
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://ngrok2.xiaomiqiu.cn:3037/mall_0?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+    initialSize: 5  #最小连接池数量
+    minIdle: 5    #最小连接池数量
+    maxActive: 20    #最大连接池数量
+    maxWait: 60000                    #获取连接时最大等待时间，单位毫秒
+    timeBetweenEvictionRunsMillis: 60000   #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000     #配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: SELECT 1 FROM DUAL      #测试连接
+    testWhileIdle: true              #申请连接的时候检测，建议配置为true，不影响性能，并且保证安全性
+    testOnBorrow: false              #获取连接时执行检测，建议关闭，影响性能
+    testOnReturn: false              #归还连接时执行检测，建议关闭，影响性能
+    poolPreparedStatements: true   #是否开启PSCache，PSCache对支持游标的数据库性能提升巨大，oracle建议开启，mysql下建议关闭
+    filters: stat,wall,log4j2          #配置扩展插件，常用的插件有=>stat:监控统计  log4j2:日志  wall:防御sql注入
+    maxPoolPreparedStatementPerConnectionSize: 20   #开启poolPreparedStatements后生效
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500   #通过connectProperties属性来打开mergeSql功能;慢SQL记录
+    #数据源配置结束
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  #redis缓存配置开始
+  redis:
+    host: 127.0.0.1   # Redis服务器地址
+    port: 6379  # Redis服务器连接端口
+    password: 123456     # Redis服务器连接密码（默认为空）
+    timeout: 20000  # 连接超时时间（毫秒）
+    # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
+    #database: 0
+    #cluster:   # 从库配置 三从的的配置
+    #nodes: 192.168.211.134:7000,192.168.211.134:7001,192.168.211.134:7002
+    #maxRedirects: 6
+    #spring boot 2.0 替换掉底层Jedis的依赖，取而代之换成了Lettuce
+    lettuce:
+      pool:
+        max-active: 8  # 连接池最大连接数（使用负值表示没有限制）
+        min-idle: 0    # 连接池中的最小空闲连接
+        max-idle: 8    # 连接池中的最大空闲连接
+        max-wait: -1   # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    #redis缓存配置开始
+
+    #log4j日志配置开始
+  logging:
+    config: classpath:logback.xml
+  #log4j日志配置结束

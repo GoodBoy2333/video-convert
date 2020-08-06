@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>队列信息</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<el-container style=" border: 1px solid #eee;" id="app">
+    <el-main>
+        <el-table
+                :data="queueInfo"
+                empty-text="当前队列为空">
+            <el-table-column
+                    prop="taskSort"
+                    label="排序值"
+                    width="100">
+            </el-table-column>
+            <el-table-column
+                    prop="bizCode"
+                    label="业务id">
+            </el-table-column>
+            <el-table-column
+                    prop="resCode"
+                    label="资源id">
+            </el-table-column>
+            <el-table-column
+                    prop="createBy"
+                    label="创建人">
+            </el-table-column>
+            <el-table-column
+                    prop="createTime"
+                    label="创建时间">
+                <template slot-scope="scope">
+                    {{ scope.row.createTime.substr(0,10) }}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="taskJobId"
+                    label="转码任务id">
+            </el-table-column>
+            <el-table-column
+                    prop="sourceUrl"
+                    label="来源路径">
+            </el-table-column>
+            <el-table-column
+                    prop="targetPath"
+                    label="转码路径">
+            </el-table-column>
+            <el-table-column
+                    prop="bps"
+                    label="转码码率">
+            </el-table-column>
+            <el-table-column
+                    prop="resolution"
+                    label="转码分辨率">
+            </el-table-column>
+            <el-table-column
+                    prop="contentLength"
+                    label="内容长度">
+                <template slot-scope="scope">
+                    {{ secondToDate(parseInt(scope.row.contentLength)) }}
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+                class="pull-right"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[5, 10, 20, 30, 40]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+        </el-pagination>
+    </el-main>
+</el-container>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- import axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+            queueTaskTimer: '',
+            queueInfo: []
+        },
+        beforeDestroy() {
+            clearInterval(this.queueTaskTimer);
+        },
+        beforeMount() {
+            this.getQueueInfo();
+            this.queueTaskTimer = setInterval(this.getQueueInfo, 3000);
+        },
+        methods: {
+            async getQueueInfo() {
+                let res = await axios.post('/converttask/queueinfo', {
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize
+                });
+                !!res.data.data.queueInfo ? this.queueInfo = res.data.data.queueInfo : this.queueInfo = [];
+                !!res.data.data.total ? this.total = res.data.data.total : this.total = 0;
+            },
+            secondToDate(result) {
+                var h = Math.floor(result / 3600);
+                var m = Math.floor((result / 60 % 60));
+                var s = Math.floor((result % 60));
+                return result = h + ":" + m + ":" + s + "";
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getQueueInfo();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getQueueInfo();
+            },
+        }
+    })
+</script>
+</html>
